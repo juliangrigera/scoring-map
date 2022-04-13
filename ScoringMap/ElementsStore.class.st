@@ -446,6 +446,18 @@ ElementsStore >> precision [
 ]
 
 { #category : #statistics }
+ElementsStore >> randIndex [
+
+	| a b c d |
+	a := self truePositivesCount.
+	b := self trueNegativesCount.
+	c := self falseNegativesCount.
+	d := self falsePositivesCount.
+
+	^ a + b / (a + b + c + d)
+]
+
+{ #category : #statistics }
 ElementsStore >> recall [
 	^ (self truePositivesCount / (self falseNegativesCount + self truePositivesCount)) asFloat
 ]
@@ -542,6 +554,13 @@ ElementsStore >> reloadTreeMaps [
 	self domElements do: [ :domElement | domElement reloadTreeMap ]
 ]
 
+{ #category : #private }
+ElementsStore >> reloadTreeMapsInner: innerRelevance outer: outerRelevance [
+
+	self domElements do: [ :domElement | 
+		domElement reloadTreeMapInner: innerRelevance outer: outerRelevance ]
+]
+
 { #category : #accessing }
 ElementsStore >> removeElement: aDomElement [
 	self domElements remove: aDomElement.
@@ -568,6 +587,17 @@ ElementsStore >> strategy [
 { #category : #accessing }
 ElementsStore >> strategy: anObject [
 	^ strategy := anObject
+]
+
+{ #category : #statistics }
+ElementsStore >> trueNegativesCount [
+
+	| allPairsCount |
+	allPairsCount := self domElements size * (self domElements size - 1)
+	                 / 2.
+	^ allPairsCount
+	  - (self falsePositivesCount + self truePositivesCount
+		   + self falseNegativesCount)
 ]
 
 { #category : #statistics }

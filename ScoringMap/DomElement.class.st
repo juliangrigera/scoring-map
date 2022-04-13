@@ -229,10 +229,25 @@ DomElement >> printOn: aStream [
 
 { #category : #'as yet unclassified' }
 DomElement >> reloadTreeMap [
+
+	self reloadTreeMapInner: 20 outer: 40
+]
+
+{ #category : #'as yet unclassified' }
+DomElement >> reloadTreeMapInner: innerRelevance outer: outerRelevance [
+
+	treeMap := self tree treeMapWithDepth: 0 andRelevance: innerRelevance.
+	self parentNodes ifNotEmpty: [ :parents | 
+		treeMap addAll:
+			(self parentNodesTreeMapWithRelevance: outerRelevance) ]
+]
+
+{ #category : #'as yet unclassified' }
+DomElement >> reloadTreeMap_ [
 	| barSize innerInitialRelevance outerInitialRelevance |
-	barSize := 17.
-	innerInitialRelevance := self height * 10.
-	outerInitialRelevance := (barSize - self height max: 0) * 5.
+	barSize := 20.
+	innerInitialRelevance := self height * 20.
+	outerInitialRelevance := (barSize - self height max: 0) * 40.
 	treeMap:= self tree treeMapWithDepth: 0 andRelevance: innerInitialRelevance.
 	self parentNodes
 		ifNotEmpty: [ :parents | treeMap addAll: (self parentNodesTreeMapWithRelevance: outerInitialRelevance) ]
