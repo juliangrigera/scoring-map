@@ -8,17 +8,6 @@ Class {
 }
 
 { #category : #grouping }
-ScoringMapStrategy >> addToGrouping: domElement [
-	| candidateGroup |
-	candidateGroup := (self grouping
-		"select: [ :group | group anyOne url host = domElement url host ]")
-		detect: [ :group | self element: domElement belongsIn: group ]
-		ifNone: [ OrderedCollection new ].
-	candidateGroup ifEmpty: [ self grouping add: candidateGroup ].
-	candidateGroup add: domElement
-]
-
-{ #category : #grouping }
 ScoringMapStrategy >> element: domElement belongsIn: group [
 	^ group
 		anySatisfy:
@@ -49,5 +38,5 @@ ScoringMapStrategy >> similitudeRateBetween: domElement and: groupElement [
 
 { #category : #configuration }
 ScoringMapStrategy >> threshold [
-	^ 0.89
+	^ 0.9
 ]

@@ -20,16 +20,19 @@ Class {
 
 { #category : #scripts }
 MultiClusteringReport class >> forStrategy: aGroupingStrategy [
+
 	| store reports |
 	store := ElementsStore instance.
 	reports := OrderedCollection new.
-	20
-		timesRepeat: [ store
-				strategy: aGroupingStrategy;
-				reloadTreeMaps;
-				shuffleElements;
-				refreshStatistics.
-			reports add: (ClusteringReport fromStore: store) ].
+	self showProgress: 0.
+	1 to: 20 do: [ :round | 
+		store
+			strategy: aGroupingStrategy;
+			reloadTreeMaps;
+			shuffleElements;
+			refreshStatistics.
+		reports add: (ClusteringReport fromStore: store).
+		self showProgress: round ].
 	^ self reports: reports strategyName: aGroupingStrategy class name
 ]
 
@@ -71,6 +74,17 @@ MultiClusteringReport class >> reports: reports strategyName: aString [
 		reports: reports;
 		strategyName: aString;
 		yourself
+]
+
+{ #category : #scripts }
+MultiClusteringReport class >> showProgress: squares [
+
+	Transcript
+		clear;
+		show: '['.
+	squares timesRepeat: [ Transcript show: '█' ].
+	20 - squares timesRepeat: [ Transcript show: '-' ].
+	Transcript show: ']'
 ]
 
 { #category : #scripts }

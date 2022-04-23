@@ -7,7 +7,8 @@ Class {
 { #category : #grouping }
 GroupingStrategy >> addToGrouping: domElement [
 	| candidateGroup |
-	candidateGroup := self grouping
+	candidateGroup :=(self grouping
+		"select: [ :group | group anyOne url host = domElement url host ]")
 		detect: [ :group | self element: domElement belongsIn: group ]
 		ifNone: [ OrderedCollection new ].
 	candidateGroup ifEmpty: [ self grouping add: candidateGroup ].

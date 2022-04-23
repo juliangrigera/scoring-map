@@ -9,7 +9,9 @@ Class {
 
 { #category : #grouping }
 XPathStrategy >> element: domElement belongsIn: group [
-	^ group anySatisfy: [ :element | self element: domElement sharesXPathWith: element ]
+
+	^ group anySatisfy: [ :element | 
+		  self element: domElement sharesXPathWith: element ]
 ]
 
 { #category : #grouping }

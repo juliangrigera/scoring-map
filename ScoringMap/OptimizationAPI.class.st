@@ -1,5 +1,14 @@
 "
 Tiny Teapot server for externally testing the parameters of Scoring Maps creation.
+CURL example of use:
+```
+curl \
+-X POST \
+-d '{""innerRelevance"":10, ""outerRelevance"":80}' \
+-H ""Content-type:application/json"" \
+-H ""X-ApiKey: bxV19NxgMfmtEak21jPEYxBdKytd2h2"" \
+http://localhost:1702/run
+```
 "
 Class {
 	#name : #OptimizationAPI,
