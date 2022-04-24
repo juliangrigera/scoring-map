@@ -14,7 +14,8 @@ Class {
 		'matchingPairs',
 		'falseNegatives',
 		'falsePositives',
-		'strategy'
+		'strategy',
+		'groupedElements'
 	],
 	#classVars : [
 		'Default'
@@ -230,7 +231,9 @@ ElementsStore >> allDomains [
 
 { #category : #'private - statistics' }
 ElementsStore >> automaticGroupsAsHashes [
-	^ self groupedElements collect: [ :group | group collect: [ :element | element hash ] ]
+
+	^ self groupedElements collect: [ :group | 
+		  group collect: [ :element | element hash ] ]
 ]
 
 { #category : #'private - statistics' }
@@ -256,6 +259,12 @@ ElementsStore >> clearLastBuffered: nElements [
 	(bufferedElements last: nElements)
 		do: [ :aDomElement | self domElements remove: aDomElement ].
 	bufferedElements removeLast: nElements
+]
+
+{ #category : #private }
+ElementsStore >> confusionMatrixFor: c and: cp [
+
+	^ (c intersection: cp) size
 ]
 
 { #category : #copying }
@@ -367,7 +376,9 @@ ElementsStore >> falsePositivesCount [
 
 { #category : #grouping }
 ElementsStore >> groupedElements [
-	^ self groupedElementsBy: self strategy
+
+	^ groupedElements ifNil: [ 
+		  groupedElements := self groupedElementsBy: self strategy ]
 ]
 
 { #category : #grouping }
@@ -454,7 +465,7 @@ ElementsStore >> randIndex [
 	c := self falseNegativesCount.
 	d := self falsePositivesCount.
 
-	^ a + b / (a + b + c + d)
+	^ (a + b / (a + b + c + d)) asFloat
 ]
 
 { #category : #statistics }
@@ -491,11 +502,18 @@ ElementsStore >> referenceGroupsOfHeight: height [
 { #category : #'private - statistics' }
 ElementsStore >> refreshStatistics [
 	self
+		reloadAutomaticGroups;
 		reloadAutomaticGroupsHashPairs;
 		reloadReferenceGroupsHashPairs;
 		reloadMatchingPairs;
 		reloadFalseNegatives;
 		reloadFalsePositives
+]
+
+{ #category : #grouping }
+ElementsStore >> reloadAutomaticGroups [
+
+	groupedElements := nil
 ]
 
 { #category : #'private - statistics' }

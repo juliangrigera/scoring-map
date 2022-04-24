@@ -14,7 +14,9 @@ Class {
 	#instVars : [
 		'falsePositives',
 		'falseNegatives',
-		'truePositives'
+		'truePositives',
+		'automatedGroups',
+		'referenceGroups'
 	],
 	#category : #ScoringMap
 }
@@ -30,10 +32,25 @@ ClusteringReport class >> falsePositives: falsePositives falseNegatives: falseNe
 
 { #category : #'instance creation' }
 ClusteringReport class >> fromStore: store [
-	^ self
-		falsePositives: store falsePositives
-		falseNegatives: store falseNegatives
-		truePositives: store truePositives
+	^ self new
+		automatedGroups: store automaticGroupsAsHashes;
+		referenceGroups: store referenceGroupsAsHashes;
+		falsePositives: store falsePositives;
+		falseNegatives: store falseNegatives;
+		truePositives: store truePositives;
+		yourself
+]
+
+{ #category : #accessing }
+ClusteringReport >> automatedGroups [
+
+	^ automatedGroups
+]
+
+{ #category : #accessing }
+ClusteringReport >> automatedGroups: anObject [
+
+	automatedGroups := anObject
 ]
 
 { #category : #statistics }
@@ -79,6 +96,18 @@ ClusteringReport >> precision [
 { #category : #statistics }
 ClusteringReport >> recall [
 	^ (self truePositivesCount / (self falseNegativesCount + self truePositivesCount)) asFloat
+]
+
+{ #category : #accessing }
+ClusteringReport >> referenceGroups [
+
+	^ referenceGroups
+]
+
+{ #category : #accessing }
+ClusteringReport >> referenceGroups: anObject [
+
+	referenceGroups := anObject
 ]
 
 { #category : #accessing }

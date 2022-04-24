@@ -11,7 +11,8 @@ Class {
 		'content',
 		'html',
 		'parentsList',
-		'treeMap'
+		'treeMap',
+		'tree'
 	],
 	#category : #ScoringMap
 }
@@ -82,6 +83,19 @@ DomElement class >> xpath: aString url: aURL boundingBox: aRectangle [
 { #category : #testing }
 DomElement >> = otherElement [
 	^ self class = otherElement class and: [ self xpath = otherElement xpath & (self sameContentAs: otherElement) ]
+]
+
+{ #category : #'as yet unclassified' }
+DomElement >> _treeMapSimilitudeRateWith: aDomElement [
+	"TODO: fix hack"
+
+	| myTreeMap otherTreeMap commonKeys commonRate |
+	myTreeMap := self treeMap.
+	aDomElement voyageId.
+	otherTreeMap := aDomElement treeMap.
+	commonKeys := myTreeMap keys intersection: otherTreeMap keys.
+	commonRate := commonKeys sumNumbers: [ :commonKey | (myTreeMap at: commonKey) max: (otherTreeMap at: commonKey) ].
+	^ (commonRate * 2 / (myTreeMap values sum + otherTreeMap values sum)) asFloat
 ]
 
 { #category : #accessing }
@@ -227,6 +241,13 @@ DomElement >> printOn: aStream [
 	aStream nextPutAll: (self xpath)
 ]
 
+{ #category : #accessing }
+DomElement >> reloadTree [
+
+	tree := (XMLHTMLParser parse: self html) nodes first nodes first
+		        nodes first "TODO: find a better way of removing <html><body>"
+]
+
 { #category : #'as yet unclassified' }
 DomElement >> reloadTreeMap [
 
@@ -260,9 +281,8 @@ DomElement >> sameContentAs: aDomElement [
 
 { #category : #accessing }
 DomElement >> tree [
-	| tree |
-	tree := XMLHTMLParser parse: self html.
-	^ tree nodes first nodes first nodes first	"TODO: find a better way of removing <html><body>"
+
+	^ tree ifNil: [ self reloadTree ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -272,16 +292,20 @@ DomElement >> treeMap [
 ]
 
 { #category : #'as yet unclassified' }
-DomElement >> treeMapSimilitudeRateWith: aDomElement [
-	"TODO: fix hack"
+DomElement >> treeMapSimilitudeRateWith: e2 [
 
-	| myTreeMap otherTreeMap commonKeys commonRate |
-	myTreeMap := self treeMap.
-	aDomElement voyageId.
-	otherTreeMap := aDomElement treeMap.
-	commonKeys := myTreeMap keys intersection: otherTreeMap keys.
-	commonRate := commonKeys sumNumbers: [ :commonKey | (myTreeMap at: commonKey) max: (otherTreeMap at: commonKey) ].
-	^ (commonRate * 2 / (myTreeMap values sum + otherTreeMap values sum)) asFloat
+	| map1 map2 commonSum m1Sum |
+	map1 := self treeMap.
+	map2 := e2 treeMap.
+	commonSum := 0.
+	m1Sum := 0.
+	map1 keysAndValuesDo: [ :key :value | 
+		map2
+			at: key
+			ifPresent: [ :m2Value | 
+			commonSum := commonSum + (value max: m2Value) ].
+		m1Sum := m1Sum + value ].
+	^ (commonSum * 2 / (m1Sum + map2 values sum)) asFloat
 ]
 
 { #category : #accessing }
