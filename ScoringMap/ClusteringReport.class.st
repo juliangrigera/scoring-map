@@ -53,6 +53,12 @@ ClusteringReport >> automatedGroups: anObject [
 	automatedGroups := anObject
 ]
 
+{ #category : #accessing }
+ClusteringReport >> elementsCount [
+
+	^ referenceGroups flattened size
+]
+
 { #category : #statistics }
 ClusteringReport >> fScore [
 	^ (2 * self recall * self precision / (self recall + self precision)) asFloat round: 4
@@ -86,6 +92,21 @@ ClusteringReport >> falsePositives: anObject [
 { #category : #statistics }
 ClusteringReport >> falsePositivesCount [
 	^ self falsePositives size
+]
+
+{ #category : #statistics }
+ClusteringReport >> mhMeasure [
+
+	"Meilã - Heckerman"
+
+	| c cp sum |
+	c := self automatedGroups collect: #asSet.
+	cp := self referenceGroups collect: #asSet.
+	sum := c sumNumbers: [ :ci | 
+		       | cpjs |
+		       cpjs := cp select: [ :cpj | c includes: cpj ].
+		       (cpjs collect: [ :cpj | (ci intersection: cpj) size ]) max ].
+	^ (sum / self elementsCount) asFloat
 ]
 
 { #category : #statistics }

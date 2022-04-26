@@ -14,5 +14,5 @@ BagOfXPathsStrategy >> similitudeRateBetween: domElement and: groupElement [
 
 { #category : #configuration }
 BagOfXPathsStrategy >> threshold [
-	^ 0.6
+	^ 0.54
 ]

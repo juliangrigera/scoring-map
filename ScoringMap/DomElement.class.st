@@ -251,7 +251,7 @@ DomElement >> reloadTree [
 { #category : #'as yet unclassified' }
 DomElement >> reloadTreeMap [
 
-	self reloadTreeMapInner: 20 outer: 40
+	self reloadTreeMapInner: 56 outer: 77
 ]
 
 { #category : #'as yet unclassified' }

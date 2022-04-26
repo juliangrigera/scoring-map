@@ -128,6 +128,12 @@ MultiClusteringReport >> averageFalsePositives [
 	^ self averageCountMeasure: #falsePositives
 ]
 
+{ #category : #accessing }
+MultiClusteringReport >> averageMHMeasure [
+
+	^ self averageMeasure: #mhMeasure
+]
+
 { #category : #private }
 MultiClusteringReport >> averageMeasure: aMeasureName [
 	^ (self reports collect: [ :report | report perform: aMeasureName ]) average
@@ -159,15 +165,17 @@ MultiClusteringReport >> fullReport [
 		streamContents: [ :stream | 
 			stream << self strategyName.
 			stream tab.
+			self averageFalsePositives printOn: stream.
+			stream tab.
+			self averageFalseNegatives printOn: stream. 
+			stream tab.
 			self averagePrecision printOn: stream.
 			stream tab.
 			self averageRecall printOn: stream.
 			stream tab.
 			self averageFScore printOn: stream.
 			stream tab.
-			self averageFalsePositives printOn: stream.
-			stream tab.
-			self averageFalseNegatives printOn: stream. ]
+			self averageMHMeasure printOn: stream.]
 ]
 
 { #category : #accessing }

@@ -38,5 +38,5 @@ ScoringMapStrategy >> similitudeRateBetween: domElement and: groupElement [
 
 { #category : #configuration }
 ScoringMapStrategy >> threshold [
-	^ 0.9
+	^ 0.84
 ]
