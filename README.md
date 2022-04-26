@@ -2,7 +2,7 @@
 Scoring Map algorithm for comparing DOM Elements and evaluation tools
 
 ### Installation
-1. Load dependencies(manual loading for now)
+1. Load dependencies (manually for now)
 
 ```Smalltalk
 Metacello new
@@ -20,11 +20,11 @@ Metacello new
 	repository: 'github://zeroflag/teapot:master/source';
 	load.
 ```
-2. Manually load ScoringMap package from this repository using Iceberg
+2. Clone this repository using Iceberg and manually load the ScoringMap package
 
 ### Setup
 
-1. Download [Database Dump](https://selfrefactoring.s3.amazonaws.com/scoring_map/ScoringMapExperimentDatabase.zip) and import
+1. Download [Database Dump](https://selfrefactoring.s3.amazonaws.com/scoring_map/dom_experiment.zip) and import as MongoDB database
 
 2. Start database and import data to image
 ```Smalltalk
@@ -37,4 +37,4 @@ ElementsStore loadInstanceFromDatabase.
 ElementsStore new
 ```
 
-4. Install capturer.gm.js as a GreaseMonkey script
+4. Install capturer.gm.js as a GreaseMonkey script (optional, to use DOM elements capturer)
